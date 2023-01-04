@@ -15,7 +15,7 @@ from yolo import YOLO, detect_video, detect_img, export_tflite_model, export_ser
 # import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-default_epochs = [1, 1]
+default_epochs = [100, 150]
 
 FLAGS = flags.FLAGS
 
