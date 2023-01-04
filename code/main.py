@@ -15,6 +15,7 @@ from yolo import YOLO, detect_video, detect_img, export_tflite_model, export_ser
 # import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
+default_epochs = [1, 1]
 
 FLAGS = flags.FLAGS
 
@@ -38,7 +39,7 @@ flags.DEFINE_integer('num_scales',
                      help="Number of Output Scales")
 flags.DEFINE_string('config', default=None, help="Config path")
 flags.DEFINE_multi_integer('epochs',
-                            default=[1, 1],
+                            default=default_epochs,
                             lower_bound=0,
                             help="Frozen train epochs and Full train epochs")
 flags.DEFINE_string('export', default='export_model/8', help="Export path")
