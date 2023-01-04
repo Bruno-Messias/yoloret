@@ -15,6 +15,7 @@ import os
 import numpy as np
 import neural_structured_learning as nsl
 import matplotlib.pyplot as plt
+import atexit
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
@@ -176,6 +177,9 @@ def train(FLAGS):
         # exit()
         history_train, history_val = model.fit(epochs, [checkpoint, tensorboard, cos_lr_freeze], train_dataset, val_dataset)
 
+        # MirroredStrategy creates a multiprocessing ThreadPool, but doesn't close it before the program ends, so its resources aren't properly cleaned up and it errors on shutdown
+        atexit.register(strategy._extended._collective_ops._pool.close) # explicitly close the pool on exit (https://github.com/tensorflow/tensorflow/issues/50487#issuecomment-997304668)
+
         print(history_train)
         print(history_val)
         # plt.plot(history_train)
@@ -185,6 +189,7 @@ def train(FLAGS):
         # plt.xlabel('Epoch')
         # plt.legend(['Train', 'Test'], loc='upper left')
         # plt.show()
+
         model.save_weights(
             os.path.join(
                 log_dir,
@@ -206,6 +211,10 @@ def train(FLAGS):
         #               val_dataset,use_adv=False)
         history_train, history_val = model.fit(epochs, [checkpoint, cos_lr, tensorboard], train_dataset,
                       val_dataset, use_adv=False)
+    
+        # Explicitly close the pool on exit
+        atexit.register(strategy._extended._collective_ops._pool.close)
+
         print(history_train)
         print(history_val)
         # plt.plot(history_train)
