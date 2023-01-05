@@ -137,7 +137,7 @@ def train(FLAGS):
 
         if backbone == BACKBONE.MOBILENETV2x75:
             backbone_name = 'mobilenetv2x75'
-        elif backbone == BACKBONE.MobileNetV2x14:
+        elif backbone == BACKBONE.MOBILENETV2x14:
             backbone_name = 'mobilenetv2x14'
         elif backbone == BACKBONE.EFFICIENTNETB3:
             backbone_name = 'efficientnetb3'
